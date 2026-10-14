@@ -1,0 +1,57 @@
+name: Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  swift_test:
+    strategy:
+      matrix:
+        xcode_version: ['13.1']
+    runs-on: macos-12
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode_version }}.app
+    steps:
+      - name: Check out STKAudioKit
+        uses: actions/checkout@v2
+      - name: Build STKAudioKit
+        run: |
+          set -euo pipefail
+          xcodebuild -destination 'platform=OS X,arch=x86_64' -scheme STKAudioKit -enableAddressSanitizer YES clean build | xcpretty
+      - name: Run Tests (ASAN)
+        run: |
+          set -euo pipefail
+          xcodebuild -destination 'platform=OS X,arch=x86_64' -scheme STKAudioKit -enableAddressSanitizer YES test | xcpretty
+
+  build_demo:
+    name: Build ${{ matrix.scheme }} (Xcode ${{ matrix.xcode_version }})
+    # NOTE: macos-latest is NOT equivalent to macos-12 as of September 2022.
+    # Source: https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+    runs-on: macos-12
+    needs: [swift_test]
+    strategy:
+      # Disabling fail-fast ensures that the job will run all configurations of the matrix, even if one fails.
+      fail-fast: false
+      matrix:
+        xcode_version:
+          - '13.2' # swift 5.5
+          - '13.4' # swift 5.6
+    steps:
+      - name: Build Demo
+        uses: AudioKit/ci/.github/actions/build-demo@main
+        with:
+          project: Demo/STKAudioKitDemo.xcodeproj
+          scheme: ${{ 'STKAudioKit' }}
+          xcode_version: ${{ matrix.xcode_version }}
+
+  # Send notification to Discord on failure.
+  send_notification:
+    name: Send Notification
+    uses: AudioKit/ci/.github/workflows/send_notification.yml@main
+    needs: [swift_test, build_demo]
+    if: ${{ failure() && github.ref == 'refs/heads/main' }}
+    secrets: inherit

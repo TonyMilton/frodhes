@@ -13,4 +13,4 @@ These are structured extracts of the references behind the Frodhes Rhodes model,
 | 07-felucca-ui.md | Felucca UI, plus a proposed reface CP-style UI *(in progress)* |
 | [08-felucca-tempo-scales.md](08-felucca-tempo-scales.md) | Felucca tempo, MIDI clock, scales, arp |
 
-`sources/` holds the downloaded papers, clones and extracted text. It is kept locally and is **not committed** (see `.gitignore`), because it contains third-party copyrighted papers, unlicensed recordings and Roland ROM images that must not be redistributed. Every file above cites its URLs, so `sources/` can be fetched again.
+`sources/` holds the downloaded papers, clones and extracted text. It is committed, except the Roland ROM images in `sources/04-code-rdpiano-stk/rdpiano/roms/`, which stay on disk only (see `.gitignore`). The papers and recordings belong to their authors and are here for research reference.
