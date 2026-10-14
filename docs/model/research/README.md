@@ -12,5 +12,6 @@ These are structured extracts of the references behind the Frodhes Rhodes model,
 | [06-felucca-fx.md](06-felucca-fx.md) | Felucca effects and physical-modelling DSP, plus the reface CP chain design |
 | [07-felucca-ui.md](07-felucca-ui.md) | Felucca UI, plus a proposed reface CP-style UI |
 | [08-felucca-tempo-scales.md](08-felucca-tempo-scales.md) | Felucca tempo, MIDI clock, scales, arp |
+| [09-reference-samples.md](09-reference-samples.md) | Rhodes reference recordings for calibration, and published measurements (tine Q, contact time, tone-bar f0) |
 
 `sources/` holds the downloaded papers, clones and extracted text. Only licence-compatible code is committed; see [SOURCES.md](SOURCES.md) for what is kept locally and where to fetch it.
